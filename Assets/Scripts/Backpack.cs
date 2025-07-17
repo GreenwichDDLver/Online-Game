@@ -8,10 +8,13 @@ public class Backpack : MonoBehaviour
 {
     [Header("背包设置")]
     public int maxSlots = 8;
+    [Tooltip("请在Inspector中拖拽背包UI面板")] 
     public GameObject backpackUI;
     
     [Header("UI设置")]
+    [Tooltip("请在Inspector中拖拽8个TMP_Text到slotTexts")] 
     public TMP_Text[] slotTexts = new TMP_Text[8]; // 8个槽位的文本
+    [Tooltip("请在Inspector中拖拽当前物品名称显示TMP_Text")] 
     public TMP_Text currentItemText; // 当前物品名称显示
     
     [Header("物品系统")]
@@ -84,13 +87,11 @@ public class Backpack : MonoBehaviour
         {
             ToggleBackpack();
         }
-        
         // Q键切换物品槽位（只在背包关闭时有效）
         if (!isBackpackOpen && Input.GetKeyDown(KeyCode.Q))
         {
             SwitchToNextSlot();
         }
-        
         // 数字键快速选择槽位（只在背包打开时有效）
         if (isBackpackOpen)
         {

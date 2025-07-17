@@ -24,14 +24,13 @@ public class Grab : MonoBehaviour
     public Material highlightMaterial; // 高亮材质
     
     [Header("物品信息")]
+    public Backpack backpack; // Inspector 拖拽
     public string currentItemName = "";
     public int currentItemID = 0;
     
     private Rigidbody heldObject;
     private Collider heldObjectCollider;
     private bool isHolding = false;
-    private Move playerMove;
-    private Backpack backpack;
     private GameObject currentHighlightedObject;
     private Material originalMaterial;
     private Renderer originalRenderer;
@@ -46,8 +45,6 @@ public class Grab : MonoBehaviour
         {
             playerCamera = Camera.main;
         }
-        playerMove = FindObjectOfType<Move>();
-        backpack = FindObjectOfType<Backpack>();
         
         // 如果没有指定holdPoint，自动创建并设置为FPS风格位置
         if (holdPoint == null)
@@ -78,6 +75,23 @@ public class Grab : MonoBehaviour
         {
             CreateHighlightMaterial();
         }
+        
+        LockCursor();
+        Application.focusChanged += OnFocusChanged;
+    }
+    
+    void OnFocusChanged(bool hasFocus)
+    {
+        if (hasFocus)
+        {
+            LockCursor();
+        }
+    }
+    
+    public void LockCursor()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
     
     void CreateHighlightMaterial()
@@ -443,3 +457,4 @@ public class Grab : MonoBehaviour
 }
 
 // 物品信息组件已移至独立的ItemInfo.cs文件
+
