@@ -21,7 +21,6 @@ public class Backpack : MonoBehaviourPun
     
     private int currentSlotIndex = 0;
     private bool isBackpackOpen = false;
-    private Grab grabSystem;
     private float originalTimeScale;
     
     // 公共属性
@@ -40,26 +39,25 @@ public class Backpack : MonoBehaviourPun
     
     void Start()
     {
-        grabSystem = FindObjectOfType<Grab>();
         InitializeBackpack();
         // 只激活本地玩家的UI
         if (photonView != null && !photonView.IsMine && backpackUI != null)
         {
             backpackUI.SetActive(false);
         }
-        // 强制隐藏背包UI，避免一上来就显示
+        // 强制隐藏背包UI，Inspector里也建议默认隐藏
         if (backpackUI != null)
         {
             backpackUI.SetActive(false);
         }
-        // 保存原始时间缩放
         originalTimeScale = Time.timeScale;
     }
     
     void Update()
     {
+        if (photonView != null && !photonView.IsMine) return;
         HandleBackpackInput();
-        // R键从背包取出当前物品（仅背包关闭时有效）
+        // 不再在Update里SetActive
         if (!isBackpackOpen && Input.GetKeyDown(KeyCode.R))
         {
             TakeItemFromBackpack();
@@ -68,14 +66,12 @@ public class Backpack : MonoBehaviourPun
     
     void InitializeBackpack()
     {
-        // 创建背包槽位
+        slots.Clear();
         for (int i = 0; i < maxSlots; i++)
         {
             BackpackSlot slot = new BackpackSlot();
             slots.Add(slot);
         }
-        
-        // 默认选中第一个槽位
         currentSlotIndex = 0;
         UpdateSlotDisplay();
     }
@@ -107,8 +103,7 @@ public class Backpack : MonoBehaviourPun
     
     public void SwitchToNextSlot()
     {
-        if (GetItemCount() == 0) return; // 没有物品不切换
-
+        if (GetItemCount() == 0) return;
         int startIndex = currentSlotIndex;
         do
         {
@@ -130,11 +125,15 @@ public class Backpack : MonoBehaviourPun
     
     public void UpdateSlotDisplay()
     {
-        // 更新所有槽位的显示
         for (int i = 0; i < slots.Count && i < slotTexts.Length; i++)
         {
             if (slotTexts[i] != null)
             {
+                // 正确命名：第一个为slot，后面为slot（1）~slot（7）
+                if (i == 0)
+                    slotTexts[i].name = "slot";
+                else
+                    slotTexts[i].name = $"slot（{i}）";
                 if (slots[i].isEmpty)
                 {
                     slotTexts[i].text = $"槽位 {i + 1}";
@@ -145,13 +144,13 @@ public class Backpack : MonoBehaviourPun
                     slotTexts[i].text = $"{slots[i].itemName} (ID:{slots[i].itemID})";
                     slotTexts[i].color = i == currentSlotIndex ? Color.yellow : Color.white;
                 }
+                Debug.Log($"{slotTexts[i].name}: {slotTexts[i].text}");
             }
         }
     }
     
     public bool AddItemToBackpack(GameObject item, string itemName, int itemID)
     {
-        // 优先用物品身上的ItemInfo
         var info = item.GetComponent<ItemInfo>();
         int trueID = info != null ? info.itemID : itemID;
         string trueName = info != null ? info.itemName : itemName;
@@ -208,22 +207,19 @@ public class Backpack : MonoBehaviourPun
     public void ToggleBackpack()
     {
         isBackpackOpen = !isBackpackOpen;
-        
         if (backpackUI != null)
         {
             backpackUI.SetActive(isBackpackOpen);
         }
-        
-        // 时间暂停/恢复
         if (isBackpackOpen)
         {
-            Time.timeScale = 0f; // 暂停时间
+            Time.timeScale = 0f;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
         else
         {
-            Time.timeScale = originalTimeScale; // 恢复时间
+            Time.timeScale = originalTimeScale;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }

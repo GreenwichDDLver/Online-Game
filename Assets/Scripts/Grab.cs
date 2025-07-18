@@ -87,6 +87,10 @@ public class Grab : MonoBehaviourPun
         {
             currentItemText.gameObject.SetActive(false);
         }
+        if (photonView != null && photonView.IsMine && currentItemText != null)
+        {
+            currentItemText.gameObject.SetActive(true);
+        }
     }
     
     void OnFocusChanged(bool hasFocus)
