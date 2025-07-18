@@ -314,39 +314,44 @@ public class Grab : MonoBehaviourPun
             Debug.Log("无法存入背包：物品为空或背包为空");
             return;
         }
-        
-        // 获取物品信息
+        // 自动补全ItemInfo，并为同类型物品分配同一个ID（基于物体名hash）
         ItemInfo itemInfo = heldObject.GetComponent<ItemInfo>();
-        string itemName = itemInfo != null ? itemInfo.itemName : heldObject.name;
-        int itemID = itemInfo != null ? itemInfo.itemID : 0;
-        
+        if (itemInfo == null)
+        {
+            itemInfo = heldObject.gameObject.AddComponent<ItemInfo>();
+            itemInfo.itemName = heldObject.gameObject.name;
+            itemInfo.itemID = heldObject.gameObject.name.GetHashCode();
+        }
+        else
+        {
+            // 如果没有itemName或itemID，自动补全
+            if (string.IsNullOrEmpty(itemInfo.itemName))
+                itemInfo.itemName = heldObject.gameObject.name;
+            if (itemInfo.itemID == 0)
+                itemInfo.itemID = heldObject.gameObject.name.GetHashCode();
+        }
+        string itemName = itemInfo.itemName;
+        int itemID = itemInfo.itemID;
         Debug.Log($"尝试存入背包：{itemName} (ID: {itemID})");
-        
         // 尝试存入背包
         if (backpack.AddItemToBackpack(heldObject.gameObject, itemName, itemID))
         {
             Debug.Log($"成功存入背包：{itemName}");
-            
             // 成功存入背包，隐藏物品（不要销毁）
             heldObject.gameObject.SetActive(false);
-            
             // 重置物品的物理状态
             heldObject.isKinematic = false;
             if (heldObjectCollider != null)
             {
                 heldObjectCollider.enabled = true;
             }
-            
             // 重置物品的父对象
             heldObject.transform.SetParent(null);
-            
             isHolding = false;
             heldObject = null;
             heldObjectCollider = null;
-            
             // 清除物品信息
             ClearItemInfo();
-            
             // 播放存入背包音效或动画
             PlayStoreEffect();
         }

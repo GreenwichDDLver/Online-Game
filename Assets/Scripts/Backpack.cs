@@ -136,7 +136,7 @@ public class Backpack : MonoBehaviourPun
                     slotTexts[i].name = $"slot（{i}）";
                 if (slots[i].isEmpty)
                 {
-                    slotTexts[i].text = $"槽位 {i + 1}";
+                    slotTexts[i].text = "Empty";
                     slotTexts[i].color = Color.gray;
                 }
                 else
