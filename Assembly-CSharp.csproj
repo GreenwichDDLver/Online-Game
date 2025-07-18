@@ -127,6 +127,10 @@
     <Compile Include="Assets/Scripts/Level1UIManager.cs" />
     <Compile Include="Assets/Scripts/CoinManager.cs" />
     <Compile Include="Assets/Scripts/StoryUIController.cs" />
+    <Compile Include="Assets/Scripts/ShowUIOnTrigger.cs" />
+    <Compile Include="Assets/Scripts/TeleportPortal.cs" />
+    <Compile Include="Assets/Scripts/ButtonHandlerTMP.cs" />
+    <Compile Include="Assets/Scripts/CoinSpawner.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />

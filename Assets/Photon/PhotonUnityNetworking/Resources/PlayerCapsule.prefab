@@ -2243,6 +2243,7 @@ MonoBehaviour:
     itemName: 
     itemID: 0
     isEmpty: 0
+  coinManager: {fileID: 0}
 --- !u!114 &7435514507597756701
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2390,6 +2391,7 @@ MonoBehaviour:
   - {fileID: 6741703706658154908}
   - {fileID: 6741703705529051619}
   slots: []
+  coinManager: {fileID: 0}
 --- !u!1 &6772370838031411625
 GameObject:
   m_ObjectHideFlags: 0

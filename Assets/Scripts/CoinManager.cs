@@ -10,13 +10,22 @@ public class CoinManager : MonoBehaviourPunCallbacks
 
     public Level1UIManager uiManager;
 
+    void Awake()
+    {
+        if (uiManager == null)
+        {
+            uiManager = FindObjectOfType<Level1UIManager>();
+        }
+    }
+
     public void AddCoin()
     {
         currentCoins++;
 
-        uiManager.UpdateCoinText(currentCoins, totalCoinsRequired);
+        if (uiManager != null)
+            uiManager.UpdateCoinText(currentCoins, totalCoinsRequired);
 
-        if (currentCoins >= totalCoinsRequired)
+        if (currentCoins >= totalCoinsRequired && uiManager != null)
         {
             uiManager.ShowWinPanel();
         }

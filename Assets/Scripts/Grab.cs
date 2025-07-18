@@ -245,6 +245,13 @@ public class Grab : MonoBehaviourPun
     
     void GrabItem(Rigidbody itemRb)
     {
+        // 检查是否是金币
+        Coin coin = itemRb.GetComponent<Coin>();
+        if (coin != null)
+        {
+            coin.GrabCoin();
+            return; // 抓到金币后直接返回，不进入普通物品抓取流程
+        }
         heldObject = itemRb;
         heldObjectCollider = itemRb.GetComponent<Collider>();
         

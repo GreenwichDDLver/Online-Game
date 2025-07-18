@@ -30,11 +30,11 @@ public class Level1UIManager : MonoBehaviour
 
         currentPage = 0;
 
-        // ³õÊ¼Ö»ÏÔÊ¾ÏÂÒ»Ò³°´Å¥
+        // ï¿½ï¿½Ê¼Ö»ï¿½ï¿½Ê¾ï¿½ï¿½Ò»Ò³ï¿½ï¿½Å¥
         startButton.gameObject.SetActive(false);
         nextButton.gameObject.SetActive(true);
 
-        // ±£Ö¤ storyText ´æÔÚ
+        // ï¿½ï¿½Ö¤ storyText ï¿½ï¿½ï¿½ï¿½
         if (storyText != null)
         {
             storyText.text = "";
@@ -42,16 +42,23 @@ public class Level1UIManager : MonoBehaviour
         }
 
         UpdateStoryText();
+
+        // æ–°å¢ï¼šåˆ·æ–°é‡‘å¸UI
+        CoinManager coinManager = FindObjectOfType<CoinManager>();
+        if (coinManager != null)
+        {
+            UpdateCoinText(0, coinManager.totalCoinsRequired);
+        }
     }
 
     private void UpdateStoryText()
     {
         if (storyPages.Length > 0 && currentPage < storyPages.Length)
         {
-            StopAllCoroutines(); // Í£Ö¹¿ÉÄÜÎ´Íê³ÉµÄĞ­³Ì
+            StopAllCoroutines(); // Í£Ö¹ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿½Éµï¿½Ğ­ï¿½ï¿½
             StartCoroutine(FadeInStoryText(storyPages[currentPage]));
 
-            // µ½×îºóÒ»Ò³Ê±ÏÔÊ¾¡°¿ªÊ¼ÓÎÏ·¡±°´Å¥
+            // ï¿½ï¿½ï¿½ï¿½ï¿½Ò»Ò³Ê±ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ï¿½Å¥
             if (currentPage == storyPages.Length - 1)
             {
                 nextButton.gameObject.SetActive(false);
@@ -99,7 +106,7 @@ public class Level1UIManager : MonoBehaviour
     public void UpdateCoinText(int current, int total)
     {
         if (coinText != null)
-            coinText.text = $"½ğ±Ò: {current} / {total}";
+            coinText.text = $"ï¿½ï¿½ï¿½: {current} / {total}";
     }
 
     public void ShowWinPanel()

@@ -5,17 +5,12 @@ public class Coin : MonoBehaviourPunCallbacks
 {
     private bool isCollected = false;
 
-    void OnTriggerEnter(Collider other)
+    // æ–°å¢ï¼šè¢«æŠ“å–æ—¶è°ƒç”¨
+    public void GrabCoin()
     {
         if (isCollected) return;
-
-        if (other.CompareTag("Player"))
-        {
-            isCollected = true;
-
-            // Í¨ÖªËùÓĞÈË½ğ±ÒÒÑ±»ÊÕ¼¯
-            photonView.RPC("CollectCoin", RpcTarget.AllBuffered);
-        }
+        isCollected = true;
+        photonView.RPC("CollectCoin", RpcTarget.AllBuffered);
     }
 
     [PunRPC]

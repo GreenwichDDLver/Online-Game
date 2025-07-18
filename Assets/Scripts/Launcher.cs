@@ -20,6 +20,6 @@ public class Launcher : MonoBehaviourPunCallbacks
     }
     public override void OnJoinedRoom()
     {
-        PhotonNetwork.Instantiate("PlayerCapsule", new Vector3(-35,-2,203),Quaternion.identity,0);
+        PhotonNetwork.Instantiate("PlayerCapsule", new Vector3(-20,-6,240),Quaternion.identity,0);
     }
 }

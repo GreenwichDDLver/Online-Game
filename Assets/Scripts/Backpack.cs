@@ -28,6 +28,11 @@ public class Backpack : MonoBehaviourPun
     public int CurrentSlotIndex => currentSlotIndex;
     public BackpackSlot CurrentSlot => slots.Count > 0 ? slots[currentSlotIndex] : null;
     
+    // 引用金币计数器
+    public CoinManager coinManager;
+    // 当前持有的金币对象
+    private GameObject heldCoin;
+    
     [System.Serializable]
     public class BackpackSlot
     {
@@ -61,6 +66,17 @@ public class Backpack : MonoBehaviourPun
         if (!isBackpackOpen && Input.GetKeyDown(KeyCode.R))
         {
             TakeItemFromBackpack();
+        }
+        // 右键销毁金币并加分
+        if (heldCoin != null && Input.GetMouseButtonDown(1))
+        {
+            // 通知金币自己被销毁
+            Coin coin = heldCoin.GetComponent<Coin>();
+            if (coin != null)
+            {
+                coin.GrabCoin(); // 触发计数和销毁
+            }
+            heldCoin = null;
         }
     }
     
@@ -378,6 +394,12 @@ public class Backpack : MonoBehaviourPun
         slot.isEmpty = true;
         UpdateSlotDisplay();
         // 可扩展：通知Grab脚本持有该物品
+    }
+    
+    // 由Grab脚本在抓到金币时调用
+    public void HoldCoin(GameObject coinObj)
+    {
+        heldCoin = coinObj;
     }
     
     void OnDestroy()
