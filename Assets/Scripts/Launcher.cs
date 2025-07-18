@@ -18,4 +18,8 @@ public class Launcher : MonoBehaviourPunCallbacks
 
         PhotonNetwork.JoinOrCreateRoom("Room", new Photon.Realtime.RoomOptions() { MaxPlayers = 2 }, default);
     }
+    public override void OnJoinedRoom()
+    {
+        PhotonNetwork.Instantiate("PlayerCapsule", new Vector3(-35,-2,203),Quaternion.identity,0);
+    }
 }
