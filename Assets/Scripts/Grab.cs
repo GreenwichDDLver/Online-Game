@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using TMPro;
 
 public class Grab : MonoBehaviourPun
 {
@@ -28,6 +29,7 @@ public class Grab : MonoBehaviourPun
     public Backpack backpack; // Inspector 拖拽
     public string currentItemName = "";
     public int currentItemID = 0;
+    public TMP_Text currentItemText; // Inspector拖拽
     
     private Rigidbody heldObject;
     private Collider heldObjectCollider;
@@ -79,6 +81,12 @@ public class Grab : MonoBehaviourPun
         
         LockCursor();
         Application.focusChanged += OnFocusChanged;
+        
+        // 只激活本地玩家的UI
+        if (photonView != null && !photonView.IsMine && currentItemText != null)
+        {
+            currentItemText.gameObject.SetActive(false);
+        }
     }
     
     void OnFocusChanged(bool hasFocus)
@@ -108,14 +116,11 @@ public class Grab : MonoBehaviourPun
     
     void Update()
     {
-        if (photonView != null && !photonView.IsMine)
-        {
-            // 禁止非本地玩家的输入和控制
-            return;
-        }
+        if (photonView != null && !photonView.IsMine) return;
         HandleGrabInput();
         UpdateHeldObject();
         CheckGrabableObjects();
+        UpdateCurrentItemUI();
     }
     
     void HandleGrabInput()
@@ -471,6 +476,23 @@ public class Grab : MonoBehaviourPun
         if (highlightMaterial != null)
         {
             DestroyImmediate(highlightMaterial);
+        }
+    }
+    
+    void UpdateCurrentItemUI()
+    {
+        if (currentItemText != null)
+        {
+            if (isHolding && heldObject != null)
+            {
+                currentItemText.text = currentItemName;
+                currentItemText.color = Color.white;
+            }
+            else
+            {
+                currentItemText.text = "未持有物品";
+                currentItemText.color = Color.gray;
+            }
         }
     }
 }

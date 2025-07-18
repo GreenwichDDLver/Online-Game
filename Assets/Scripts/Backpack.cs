@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Photon.Pun;
 
-public class Backpack : MonoBehaviour
+public class Backpack : MonoBehaviourPun
 {
     [Header("背包设置")]
     public int maxSlots = 8;
@@ -14,8 +15,6 @@ public class Backpack : MonoBehaviour
     [Header("UI设置")]
     [Tooltip("请在Inspector中拖拽8个TMP_Text到slotTexts")] 
     public TMP_Text[] slotTexts = new TMP_Text[8]; // 8个槽位的文本
-    [Tooltip("请在Inspector中拖拽当前物品名称显示TMP_Text")] 
-    public TMP_Text currentItemText; // 当前物品名称显示
     
     [Header("物品系统")]
     public List<BackpackSlot> slots = new List<BackpackSlot>();
@@ -43,13 +42,16 @@ public class Backpack : MonoBehaviour
     {
         grabSystem = FindObjectOfType<Grab>();
         InitializeBackpack();
-        
-        // 隐藏背包UI
+        // 只激活本地玩家的UI
+        if (photonView != null && !photonView.IsMine && backpackUI != null)
+        {
+            backpackUI.SetActive(false);
+        }
+        // 强制隐藏背包UI，避免一上来就显示
         if (backpackUI != null)
         {
             backpackUI.SetActive(false);
         }
-        
         // 保存原始时间缩放
         originalTimeScale = Time.timeScale;
     }
@@ -57,8 +59,6 @@ public class Backpack : MonoBehaviour
     void Update()
     {
         HandleBackpackInput();
-        UpdateCurrentItemDisplay();
-        
         // R键从背包取出当前物品（仅背包关闭时有效）
         if (!isBackpackOpen && Input.GetKeyDown(KeyCode.R))
         {
@@ -144,28 +144,6 @@ public class Backpack : MonoBehaviour
                 {
                     slotTexts[i].text = $"{slots[i].itemName} (ID:{slots[i].itemID})";
                     slotTexts[i].color = i == currentSlotIndex ? Color.yellow : Color.white;
-                }
-            }
-        }
-    }
-    
-    void UpdateCurrentItemDisplay()
-    {
-        // 更新当前物品显示（屏幕右侧）
-        if (currentItemText != null)
-        {
-            if (currentSlotIndex >= 0 && currentSlotIndex < slots.Count)
-            {
-                BackpackSlot slot = slots[currentSlotIndex];
-                if (!slot.isEmpty)
-                {
-                    currentItemText.text = $"{slot.itemName} (ID:{slot.itemID})";
-                    currentItemText.color = Color.white;
-                }
-                else
-                {
-                    currentItemText.text = "空槽位";
-                    currentItemText.color = Color.gray;
                 }
             }
         }
@@ -334,7 +312,6 @@ public class Backpack : MonoBehaviour
         slot.itemID = 0;
         slot.isEmpty = true;
         UpdateSlotDisplay();
-        UpdateCurrentItemDisplay();
     }
     
     void OnDestroy()

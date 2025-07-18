@@ -1348,7 +1348,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  currentItemText: {fileID: 0}
   slots: []
 --- !u!114 &888659727529869589
 MonoBehaviour:
@@ -1380,6 +1379,7 @@ MonoBehaviour:
   backpack: {fileID: 888659727529869588}
   currentItemName: 
   currentItemID: 0
+  currentItemText: {fileID: 0}
 --- !u!114 &888659727529869595
 MonoBehaviour:
   m_ObjectHideFlags: 0
