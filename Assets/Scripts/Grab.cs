@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Grab : MonoBehaviour
+public class Grab : MonoBehaviourPun
 {
     [Header("抓取设置")]
     public float grabRange = 2.5f;
@@ -107,6 +108,11 @@ public class Grab : MonoBehaviour
     
     void Update()
     {
+        if (photonView != null && !photonView.IsMine)
+        {
+            // 禁止非本地玩家的输入和控制
+            return;
+        }
         HandleGrabInput();
         UpdateHeldObject();
         CheckGrabableObjects();
@@ -205,6 +211,9 @@ public class Grab : MonoBehaviour
     
     public void TryGrabItem()
     {
+        // 只允许本地玩家操作
+        if (!photonView.IsMine) return;
+
         RaycastHit hit;
         Vector3 rayStart = playerCamera.transform.position;
         Vector3 rayDirection = playerCamera.transform.forward;
@@ -247,6 +256,16 @@ public class Grab : MonoBehaviour
         
         // 播放抓取音效或动画
         PlayGrabEffect();
+
+        // 抓取成功后，通知所有人
+        photonView.RPC("RPC_GrabItem", RpcTarget.AllBuffered, currentItemID);
+    }
+    
+    [PunRPC]
+    void RPC_GrabItem(int itemID)
+    {
+        // 在所有客户端执行抓取逻辑
+        // 例如：隐藏物品、设置父对象等
     }
     
     public void DropItemWithForce()
