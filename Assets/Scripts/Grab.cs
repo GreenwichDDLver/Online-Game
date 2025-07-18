@@ -134,20 +134,26 @@ public class Grab : MonoBehaviourPun
         {
             if (isHolding)
             {
-                DropItemWithForce(); // 丢出物品
+                DropItemWithForce(); // 丢出物品（原有逻辑，轻力度）
             }
             else
             {
                 TryGrabItem();
             }
         }
-        
+
+        // R键强力抛出物品
+        if (Input.GetKeyDown(KeyCode.R) && isHolding)
+        {
+            ThrowItemForward(); // 新增：R键向前抛出
+        }
+
         // 右键存入背包
         if (Input.GetMouseButtonDown(1) && isHolding)
         {
             StoreItemInBackpack();
         }
-        
+
         // 按F键查看物品信息
         if (Input.GetKeyDown(KeyCode.F) && isHolding)
         {
@@ -503,6 +509,34 @@ public class Grab : MonoBehaviourPun
                 currentItemText.color = Color.gray;
             }
         }
+    }
+
+    // 新增：R键强力抛出物品
+    void ThrowItemForward()
+    {
+        if (heldObject == null) return;
+        // 恢复物理和碰撞
+        heldObject.isKinematic = false;
+        if (heldObjectCollider != null)
+        {
+            heldObjectCollider.enabled = true;
+        }
+        // 设置放下位置
+        heldObject.transform.SetParent(null);
+        heldObject.transform.position = dropPosition.position;
+        // 应用适中丢出力，方向为正前上方（45度）
+        Vector3 forward = playerCamera.transform.forward;
+        Vector3 up = playerCamera.transform.up;
+        Vector3 throwDirection = (forward + up).normalized; // 45度角
+        float throwForce = dropForce * 2.5f; // 力度适中
+        heldObject.velocity = throwDirection * throwForce;
+        isHolding = false;
+        heldObject = null;
+        heldObjectCollider = null;
+        // 清除物品信息
+        ClearItemInfo();
+        // 播放丢出音效或动画
+        PlayDropEffect();
     }
 }
 

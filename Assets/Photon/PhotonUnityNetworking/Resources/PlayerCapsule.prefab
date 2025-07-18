@@ -1586,7 +1586,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: cb5dadf6f210bf64097c1e6692f8d7ef, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -2273,7 +2273,7 @@ MonoBehaviour:
   backpack: {fileID: 7435514507597756700}
   currentItemName: 
   currentItemID: 0
-  currentItemText: {fileID: 0}
+  currentItemText: {fileID: 6741703705913871447}
 --- !u!114 &7435514507597756691
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3642,6 +3642,17 @@ MonoBehaviour:
 --- !u!114 &6741703705714780210 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8852025239452305226, guid: ba0a4a86551f74e0e989a84c3f6934ba, type: 3}
+  m_PrefabInstance: {fileID: 2834982718159761272}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6741703705913871447 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8852025239641973551, guid: ba0a4a86551f74e0e989a84c3f6934ba, type: 3}
   m_PrefabInstance: {fileID: 2834982718159761272}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

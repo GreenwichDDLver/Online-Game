@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Synty/PolygonAncientEgypt/Scenes/Demo.unity
+- path: "Assets/Scenes/\u6D4B\u8BD5\u5B8C\u62101.unity"
   isLoaded: 1
   isActive: 1
   isSubScene: 0

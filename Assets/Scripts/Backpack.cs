@@ -86,7 +86,27 @@ public class Backpack : MonoBehaviourPun
         // Q键切换物品槽位（只在背包关闭时有效）
         if (!isBackpackOpen && Input.GetKeyDown(KeyCode.Q))
         {
-            SwitchToNextSlot();
+            SwitchToNextSlot(); // 只切换非空槽位，原有逻辑已实现
+        }
+        // 背包打开时，支持上下方向键切换
+        if (isBackpackOpen)
+        {
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                SwitchToPrevSlot();
+            }
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                SwitchToNextSlot();
+            }
+            // 回车键选中当前物品并取出到手里
+            if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                if (!IsCurrentSlotEmpty())
+                {
+                    OnItemTakeToHand(currentSlotIndex);
+                }
+            }
         }
         // 数字键快速选择槽位（只在背包打开时有效）
         if (isBackpackOpen)
@@ -308,6 +328,56 @@ public class Backpack : MonoBehaviourPun
         slot.itemID = 0;
         slot.isEmpty = true;
         UpdateSlotDisplay();
+    }
+    
+    // 新增：向上切换非空槽位
+    public void SwitchToPrevSlot()
+    {
+        if (GetItemCount() == 0) return;
+        int startIndex = currentSlotIndex;
+        do
+        {
+            currentSlotIndex = (currentSlotIndex - 1 + slots.Count) % slots.Count;
+            if (!slots[currentSlotIndex].isEmpty)
+                break;
+        } while (currentSlotIndex != startIndex);
+        UpdateSlotDisplay();
+    }
+    
+    // 新增：取出物品到手里（事件/接口，需由Grab监听或调用）
+    public void OnItemTakeToHand(int slotIndex)
+    {
+        // 这里仅做物品激活和出现在玩家前方，具体交互由Grab实现
+        if (slotIndex < 0 || slotIndex >= slots.Count) return;
+        BackpackSlot slot = slots[slotIndex];
+        if (slot.isEmpty || slot.item == null) return;
+        // 激活物品
+        slot.item.SetActive(true);
+        // 放在玩家前方
+        Transform playerTransform = transform;
+        Vector3 dropPosition = playerTransform.position + playerTransform.forward * 2f + Vector3.up * 0.5f;
+        slot.item.transform.position = dropPosition;
+        slot.item.transform.SetParent(null);
+        // 物理状态
+        Rigidbody rb = slot.item.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+        Collider col = slot.item.GetComponent<Collider>();
+        if (col != null)
+        {
+            col.enabled = true;
+        }
+        // 清空槽位
+        slot.item = null;
+        slot.itemName = "";
+        slot.itemID = 0;
+        slot.isEmpty = true;
+        UpdateSlotDisplay();
+        // 可扩展：通知Grab脚本持有该物品
     }
     
     void OnDestroy()
