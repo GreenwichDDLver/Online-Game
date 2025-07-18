@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7497776894259981270
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7497776894259981268}
+  - component: {fileID: 7497776894259981271}
+  m_Layer: 0
+  m_Name: CoinUIManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7497776894259981268
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7497776894259981270}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -29.444, y: -5.138281, z: 233.89017}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7497776894259981271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7497776894259981270}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 450bb6947a988394c9f30a53e70e197b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startPanel: {fileID: 0}
+  winPanel: {fileID: 0}
+  coinText: {fileID: 0}
+  storyText: {fileID: 0}
+  nextButton: {fileID: 0}
+  startButton: {fileID: 0}
+  storyPages:
+  - Traveler, what you see before you is not an ordinary mausoleum corridor, but
+    a forbidden corridor leading to the altar of Usekaf. Legend has it that in the
+    era of Pharaoh Ramses Seti, ten of the most devout "Eye of Maat" priests served
+    the goddess of truth and order, Maat (Maat). Each of them held a "Heart of Maat"
+    amulet made of holy gold and meteoric iron, on which were engraved fragments
+    of the law of cosmic harmony.
+  - 'Thousands of years have passed. Today, the power of the seal is fading, and
+    the dusty door of the Djed Pillar is showing a faint light. Legend has it that
+    only by collecting the ten lost "Hearts of Maat" and placing them back on the
+    sacred scales (The Scales of Maat) in the center of the altar, and letting the
+    weight of truth overwhelm the falsehood, can the Djed Pillar, which symbolizes
+    rebirth and stability, stand upright, opening the way to deeper wisdom (or salvation)
+    for you.
+
+'

@@ -123,6 +123,10 @@
     <Compile Include="Assets/Photon/PhotonChat/Demos/DemoChat/ChatGui.cs" />
     <Compile Include="Assets/TextMesh Pro/Examples &amp; Extras/Scripts/VertexZoom.cs" />
     <Compile Include="Assets/Photon/PhotonChat/Demos/Common/OnStartDelete.cs" />
+    <Compile Include="Assets/Scripts/Coin.cs" />
+    <Compile Include="Assets/Scripts/Level1UIManager.cs" />
+    <Compile Include="Assets/Scripts/CoinManager.cs" />
+    <Compile Include="Assets/Scripts/StoryUIController.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets/TextMesh Pro/Shaders/TMPro.cginc" />
