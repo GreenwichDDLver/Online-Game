@@ -2,10 +2,11 @@ using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
+using Photon.Pun;
 
 namespace StarterAssets
 {
-	public class StarterAssetsInputs : MonoBehaviour
+	public class StarterAssetsInputs : MonoBehaviourPun
 	{
 		[Header("Character Input Values")]
 		public Vector2 move;
@@ -23,11 +24,13 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM
 		public void OnMove(InputValue value)
 		{
+			if (photonView != null && !photonView.IsMine) return;
 			MoveInput(value.Get<Vector2>());
 		}
 
 		public void OnLook(InputValue value)
 		{
+			if (photonView != null && !photonView.IsMine) return;
 			if(cursorInputForLook)
 			{
 				LookInput(value.Get<Vector2>());
@@ -36,11 +39,13 @@ namespace StarterAssets
 
 		public void OnJump(InputValue value)
 		{
+			if (photonView != null && !photonView.IsMine) return;
 			JumpInput(value.isPressed);
 		}
 
 		public void OnSprint(InputValue value)
 		{
+			if (photonView != null && !photonView.IsMine) return;
 			SprintInput(value.isPressed);
 		}
 #endif
@@ -48,21 +53,25 @@ namespace StarterAssets
 
 		public void MoveInput(Vector2 newMoveDirection)
 		{
+			if (photonView != null && !photonView.IsMine) return;
 			move = newMoveDirection;
 		} 
 
 		public void LookInput(Vector2 newLookDirection)
 		{
+			if (photonView != null && !photonView.IsMine) return;
 			look = newLookDirection;
 		}
 
 		public void JumpInput(bool newJumpState)
 		{
+			if (photonView != null && !photonView.IsMine) return;
 			jump = newJumpState;
 		}
 
 		public void SprintInput(bool newSprintState)
 		{
+			if (photonView != null && !photonView.IsMine) return;
 			sprint = newSprintState;
 		}
 		

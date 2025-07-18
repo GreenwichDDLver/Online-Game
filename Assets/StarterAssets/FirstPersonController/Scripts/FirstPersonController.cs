@@ -2,6 +2,8 @@
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
+using Photon.Pun;
+using Cinemachine;
 
 namespace StarterAssets
 {
@@ -9,7 +11,7 @@ namespace StarterAssets
 #if ENABLE_INPUT_SYSTEM
 	[RequireComponent(typeof(PlayerInput))]
 #endif
-	public class FirstPersonController : MonoBehaviour
+	public class FirstPersonController : MonoBehaviourPun
 	{
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -101,17 +103,31 @@ namespace StarterAssets
 			_input = GetComponent<StarterAssetsInputs>();
 #if ENABLE_INPUT_SYSTEM
 			_playerInput = GetComponent<PlayerInput>();
-#else
-			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
-
-			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
 			_fallTimeoutDelta = FallTimeout;
+
+			// Photon: 只允许本地玩家启用输入和摄像机
+			if (photonView != null && !photonView.IsMine)
+			{
+				if (_playerInput != null) _playerInput.enabled = false;
+				if (CinemachineCameraTarget != null) CinemachineCameraTarget.SetActive(false);
+			}
+			else
+			{
+				// 设置Cinemachine虚拟相机的Follow/LookAt
+				var vcam = FindObjectOfType<CinemachineVirtualCamera>();
+				if (vcam != null && CinemachineCameraTarget != null)
+				{
+					vcam.Follow = CinemachineCameraTarget.transform;
+					vcam.LookAt = CinemachineCameraTarget.transform;
+				}
+			}
 		}
 
 		private void Update()
 		{
+			if (photonView != null && !photonView.IsMine) return;
 			JumpAndGravity();
 			GroundedCheck();
 			Move();
@@ -119,7 +135,14 @@ namespace StarterAssets
 
 		private void LateUpdate()
 		{
+			if (photonView != null && !photonView.IsMine) return;
 			CameraRotation();
+		}
+
+		private void FixedUpdate()
+		{
+			if (photonView != null && !photonView.IsMine) return;
+			// ...原有FixedUpdate逻辑...
 		}
 
 		private void GroundedCheck()
